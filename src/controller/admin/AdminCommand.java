@@ -8,13 +8,17 @@ import java.util.regex.Pattern;
 
 public enum AdminCommand {
 
-    NEW_STUDENT("new student ([a-zA-Z0-9_]+) ([a-zA-Z0-9_]+) (\\w+) (\\d+) (yes|no)"),
-    NEW_DISTRIBUTOR("new distributor ([a-zA-Z0-9_]+) ([a-zA-Z0-9_]+) (\\w+) ([a-zA-Z0-9_]+)"),
-    NEW_ADMIN("new admin ([a-zA-Z0-9_]+) ([a-zA-Z0-9_]+) (\\w+)"),
-    NEW_FOOD("new food (\\w+) (\\d+) (dinner|breakfast|lunch)"),
-    SET_FOOD("set food (\\w+) (\\w+) (\\d+) (dinner|breakfast|lunch)"),
-    RESERVE_REPORT("reserve report (\\d+)"),
-    REPORT("report"),
+    HELP("help"),
+    ADD_STUDENT("add student ([a-zA-Z0-9_]+) ([a-zA-Z0-9_]+) (\\w+) (\\d+) (yes|no)"),
+    ADD_DISTRIBUTOR("add distributor ([a-zA-Z0-9_]+) ([a-zA-Z0-9_]+) (\\w+) ([a-zA-Z0-9_]+)"),
+    ADD_ADMIN("add admin ([a-zA-Z0-9_]+) ([a-zA-Z0-9_]+) (\\w+)"),
+    ADD_FOOD("add food (\\w+) (\\d+) (dinner|breakfast|lunch)"),
+    SET_FOOD("set menu (\\w+) (\\w+) (\\d+) (dinner|breakfast|lunch)"),
+    DEMANDS_REPORT("demands report (\\d+) (dinner|breakfast|lunch)"),
+    DISTRIBUTE_REPORT("distribute report (\\d+) (dinner|breakfast|lunch)"),
+    ADMINS_LIST("admins list"),
+    STUDENTS_LIST("students list"),
+    DISTRIBUTORS_LIST("distributors list"),
     NEXT_MEAL("next meal");
 
     private final Pattern pattern;

@@ -44,4 +44,14 @@ public class FoodHandler {
         }
         return isAvailable;
     }
+
+    public static String[] getMenu(int day, String type){
+        String[] food = new String[2];
+        switch (type){
+            case "breakfast" -> food = FoodHandler.breakfastTable.get(day);
+            case "lunch" -> food = FoodHandler.lunchTable.get(day);
+            case "dinner" -> food = FoodHandler.dinnerTable.get(day);
+        }
+        return food;
+    }
 }

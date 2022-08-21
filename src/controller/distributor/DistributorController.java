@@ -9,14 +9,17 @@ import exceptions.ExitException;
 import exceptions.IllegalCommandException;
 import model.self.Self;
 import model.user.Distributor;
+import view.DistributorMenu;
 
 import java.util.regex.Matcher;
 
 public class DistributorController extends UserController {
     Distributor distributor;
+    Self self;
 
     public DistributorController(Distributor distributor) {
         this.distributor = distributor;
+        self = Self.selves.get(distributor.selfName);
     }
 
     @Override
@@ -27,8 +30,9 @@ public class DistributorController extends UserController {
             DistributorCommand distributorCommand = DistributorCommand.findCommand(input);
             Matcher matcher = DistributorCommand.getMatcher(input, distributorCommand);
             if (matcher.find())
-                if (distributorCommand == DistributorCommand.CHECK_DEMAND) {
-                    checkDemand(Integer.parseInt(matcher.group(1)));
+                switch (distributorCommand) {
+                    case CHECK_DEMAND -> checkDemand(Integer.parseInt(matcher.group(1)));
+                    case GIVE_FOOD -> giveFood(Integer.parseInt(matcher.group(1)));
                 }
 
 
@@ -49,11 +53,17 @@ public class DistributorController extends UserController {
 
     }
 
+    private void giveFood(int id) {
+
+    }
+
     private void checkDemand(int id) {
+        String food = "";
         switch (Time.currentMeal()){
-            case "breakfast" -> System.out.println(Self.selves.get(distributor.selfName).breakfastStudents.get(Time.day).get(id));
-            case "lunch" -> System.out.println(Self.selves.get(distributor.selfName).lunchStudents.get(Time.day).get(id));
-            case "dinner" -> System.out.println(Self.selves.get(distributor.selfName).dinnerStudents.get(Time.day).get(id));
+            case "breakfast" -> food = self.breakfastStudents.get(Time.day).get(id);
+            case "lunch" -> food = self.lunchStudents.get(Time.day).get(id);
+            case "dinner" -> food = self.dinnerStudents.get(Time.day).get(id);
         }
+        DistributorMenu.printDemand(food);
     }
 }

@@ -7,7 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum DistributorCommand {
-    CHECK_DEMAND("check demand (\\d+)");
+    CHECK_DEMAND("check demand (\\d+)"),
+    GIVE_FOOD("give food (\\d+)");
 
     private final Pattern pattern;
     private final String regex;

@@ -4,6 +4,7 @@ package model.user;
 import model.self.Reserve;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Student extends User {
     public static ArrayList<Student> students;
@@ -38,12 +39,26 @@ public class Student extends User {
         reserveList.add(reserve);
         wallet -= reserve.price;
     }
+
+    public void retake(int day, String type){
+        for (Reserve reserve : reserveList){
+            if ((reserve.day == day) && (Objects.equals(reserve.type, type))) {
+                reserveList.remove(reserve);
+                wallet += reserve.price;
+            }
+        }
+    }
+
     public boolean hasFood(int day, String type) {
         for (Reserve reserve :
                 reserveList) {
             if (reserve.day == day && reserve.type.equals(type))
-                return false;
+                return true;
         }
-        return true;
+        return false;
+    }
+
+    public boolean canReserve(String foodType) {
+        return (inDorm) || ((!Objects.equals(foodType, "breakfast")) && (!Objects.equals(foodType, "dinner")));
     }
 }

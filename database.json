@@ -1,14 +1,5 @@
 {
-  "students": [
-    {
-      "inDorm": true,
-      "id": 1,
-      "wallet": 0,
-      "username": "aliemaryam",
-      "password": "alie_maryam",
-      "name": "alie_maryam"
-    }
-  ],
+  "students": [],
   "admins": [
     {
       "username": "admin",

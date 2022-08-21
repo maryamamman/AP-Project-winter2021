@@ -8,10 +8,11 @@ import java.util.regex.Pattern;
 
 public enum StudentCommand {
 
-    SHOW_FOOD_MENU("show food menu"),
+    SHOW_MENU("show menu (\\d+) (dinner|breakfast|lunch)"),
     RETAKE("retake (\\d+) (dinner|breakfast|lunch)"),
     TRANSFER("transfer (\\d+) (dinner|breakfast|lunch) ([a-zA-Z0-9_]+) (\\d+) (\\d+)"),
-    CREDIT_ENHANCEMENT("credit enhancement (\\d+)"),
+    DEPOSIT("deposit (\\d+)"),
+    RESERVE_REPORT("reserve report"),
     RESERVE("reserve (\\d+) (dinner|breakfast|lunch) (\\w+) ([a-zA-Z0-9_]+)");
 
     private final Pattern pattern;

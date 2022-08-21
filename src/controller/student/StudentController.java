@@ -10,6 +10,7 @@ import model.self.FoodHandler;
 import model.self.Self;
 import model.self.Reserve;
 import model.user.Student;
+import view.StudentMenu;
 
 import java.util.regex.Matcher;
 
@@ -30,10 +31,11 @@ public class StudentController extends UserController {
             if (matcher.find())
                 switch (studentCommand) {
                     case RESERVE -> reserve(Integer.parseInt(matcher.group(1)), matcher.group(2), matcher.group(3), matcher.group(4));
-                    case SHOW_FOOD_MENU -> showFoodMenu();
-                    case CREDIT_ENHANCEMENT -> creditEnhancement(Integer.parseInt(matcher.group(1)));
+                    case SHOW_MENU -> showFoodMenu(Integer.parseInt(matcher.group(1)), matcher.group(2));
+                    case DEPOSIT -> creditEnhancement(Integer.parseInt(matcher.group(1)));
                     case TRANSFER -> transfer(matcher.group(2), Integer.parseInt(matcher.group(2)), matcher.group(3), matcher.group(4), Integer.parseInt(matcher.group(5)), Integer.parseInt(matcher.group(6)));
                     case RETAKE -> retake(Integer.parseInt(matcher.group(1)), matcher.group(2));
+                    case RESERVE_REPORT -> reserveReport();
                 }
 
             return null;
@@ -52,7 +54,16 @@ public class StudentController extends UserController {
         return controller;
     }
 
+    private void reserveReport() {
+        for (Reserve reserve : student.reserveList) {
+            StudentMenu.printReservations(reserve);
+        }
+    }
+
     private void retake(int day, String type) {
+        if (!student.hasFood(day, type))
+            throw new IllegalCommandException("This food is not reserved!");
+        student.retake(day, type);
     }
 
     private void transfer(String foodName, int day, String type, String selfName, int fromId, int toId) {
@@ -81,8 +92,25 @@ public class StudentController extends UserController {
     }
 
 
-    private void showFoodMenu() {
-
+    private void showFoodMenu(int day, String type) {
+        String[] menu = FoodHandler.getMenu(day,type);
+        int price1 = 0;
+        int price2 = 0;
+        switch (type){
+            case "breakfast" -> {
+                price1 = FoodHandler.breakfastPrice.get(menu[0]);
+                price2 = FoodHandler.breakfastPrice.get(menu[1]);
+            }
+            case "lunch" -> {
+                price1 = FoodHandler.lunchPrice.get(menu[0]);
+                price2 = FoodHandler.lunchPrice.get(menu[1]);
+            }
+            case "dinner" -> {
+                price1 = FoodHandler.dinnerPrice.get(menu[0]);
+                price2 = FoodHandler.dinnerPrice.get(menu[1]);
+            }
+        }
+        StudentMenu.printMenu(menu, price1, price2);
     }
 
 
@@ -91,6 +119,8 @@ public class StudentController extends UserController {
             throw new IllegalCommandException("You've already reserved your food.");
         if (!FoodHandler.isAvailable(foodName, day, type))
             throw new IllegalCommandException("This food isn't available in the chosen time.");
+        if (!student.canReserve(type))
+            throw new IllegalCommandException("You're not in dorm.");
         int price = 0;
         switch (type) {
             case "breakfast" -> price = FoodHandler.breakfastPrice.get(foodName);
@@ -98,7 +128,7 @@ public class StudentController extends UserController {
             case "dinner" -> price = FoodHandler.dinnerPrice.get(foodName);
         }
         if (student.wallet >= price) {
-            Reserve reserve = new Reserve(day, type, foodName, price);
+            Reserve reserve = new Reserve(day, type, foodName, price, selfName);
             student.reserve(reserve);
         } else throw new IllegalCommandException(
                 "You don't have enough money in your account.");

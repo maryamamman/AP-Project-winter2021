@@ -9,12 +9,14 @@ public class Reserve {
     public String foodName;
     public boolean eaten;
     public int price;
+    public String selfName;
 
-    public Reserve(int day, String type, String foodName, int price) {
+    public Reserve(int day, String type, String foodName, int price, String selfName) {
         this.day = day;
         this.type = type;
         this.foodName = foodName;
         this.price = price;
+        this.selfName = selfName;
         eaten = false;
     }
 

@@ -1,6 +1,7 @@
 package model.self;
 
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Self {
     public static HashMap<String, Self> selves;
@@ -33,5 +34,36 @@ public class Self {
                 dinnerStudents.get(day).put(id, foodName);
             }
         }
+    }
+
+    public int demands(int day, String type, String foodName) {
+        AtomicInteger count = new AtomicInteger();
+        try {
+            switch (type) {
+                case "breakfast" -> {
+                    breakfastStudents.get(day).forEach((key, value) -> {
+                        if (value.equals(foodName))
+                            count.getAndIncrement();
+                    });
+                }
+                case "lunch" -> {
+                    lunchStudents.get(day).forEach((key, value) -> {
+                        if (value.equals(foodName))
+                            count.getAndIncrement();
+                    });
+                }
+                case "dinner" -> {
+                    dinnerStudents.get(day).forEach((key, value) -> {
+                        if (value.equals(foodName))
+                            count.getAndIncrement();
+                    });
+                }
+            }
+
+        }catch (NullPointerException e){
+            return 0;
+        }
+
+        return count.get();
     }
 }
