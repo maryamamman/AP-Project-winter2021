@@ -1,5 +1,7 @@
 package model.self;
 
+import model.Database;
+
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -36,6 +38,20 @@ public class Self {
         }
     }
 
+    public void retakeFood(int day, String type, int id) {
+        switch (type) {
+            case "breakfast" -> breakfastStudents.get(day).remove(id);
+            case "lunch" -> lunchStudents.get(day).remove(id);
+            case "dinner" -> dinnerStudents.get(day).remove(id);
+        }
+    }
+
+    public void transferFood(int day, String type, String foodName, int id, int toId) {
+        retakeFood(day, type, id);
+        reserveFood(day, type, foodName, toId);
+
+    }
+
     public int demands(int day, String type, String foodName) {
         AtomicInteger count = new AtomicInteger();
         try {
@@ -66,4 +82,5 @@ public class Self {
 
         return count.get();
     }
+
 }

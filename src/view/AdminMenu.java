@@ -13,9 +13,13 @@ public abstract class AdminMenu {
                 add admin [username] [password] [name]
                 add food [food name] [food price] [food type(breakfast or lunch or dinner)]
                 set menu [food1 name] [food2 name] [day] [meal(breakfast or lunch or dinner)]
-                demands report [day]
-                distribute report [day]
-                next meal""");
+                demands report [day] [meal(breakfast or lunch or dinner)]
+                distribute report [day] [meal(breakfast or lunch or dinner)]
+                admins list
+                students list
+                distributors list
+                next meal
+                """);
     }
 
     public static void printFoodDemands(int day, String type, String[] food, int food1, int food2) {

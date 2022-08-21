@@ -12,6 +12,7 @@ import model.self.Reserve;
 import model.user.Student;
 import view.StudentMenu;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 
 public class StudentController extends UserController {
@@ -30,10 +31,11 @@ public class StudentController extends UserController {
             Matcher matcher = StudentCommand.getMatcher(input, studentCommand);
             if (matcher.find())
                 switch (studentCommand) {
+                    case HELP -> help();
                     case RESERVE -> reserve(Integer.parseInt(matcher.group(1)), matcher.group(2), matcher.group(3), matcher.group(4));
                     case SHOW_MENU -> showFoodMenu(Integer.parseInt(matcher.group(1)), matcher.group(2));
                     case DEPOSIT -> creditEnhancement(Integer.parseInt(matcher.group(1)));
-                    case TRANSFER -> transfer(matcher.group(2), Integer.parseInt(matcher.group(2)), matcher.group(3), matcher.group(4), Integer.parseInt(matcher.group(5)), Integer.parseInt(matcher.group(6)));
+                    case TRANSFER -> transfer(Integer.parseInt(matcher.group(1)), matcher.group(2), Integer.parseInt(matcher.group(3)));
                     case RETAKE -> retake(Integer.parseInt(matcher.group(1)), matcher.group(2));
                     case RESERVE_REPORT -> reserveReport();
                 }
@@ -54,6 +56,10 @@ public class StudentController extends UserController {
         return controller;
     }
 
+    private void help() {
+        StudentMenu.printHelp();
+    }
+
     private void reserveReport() {
         for (Reserve reserve : student.reserveList) {
             StudentMenu.printReservations(reserve);
@@ -64,25 +70,24 @@ public class StudentController extends UserController {
         if (!student.hasFood(day, type))
             throw new IllegalCommandException("This food is not reserved!");
         student.retake(day, type);
+        String selfName = "";
+        for (Reserve reserve : student.reserveList)
+            if (day == reserve.day && Objects.equals(type, reserve.type)) {
+                selfName = reserve.selfName;
+                break;
+            }
+        Self.selves.get(selfName).retakeFood(day, type, student.id);
     }
 
-    private void transfer(String foodName, int day, String type, String selfName, int fromId, int toId) {
+    private void transfer(int day, String type, int toId) {
         if (!student.hasFood(day, type))
             throw new IllegalCommandException("This food is not reserved!");
-        if (!FoodHandler.isAvailable(foodName, day, type))
-            throw new IllegalCommandException("This food isn't available in the chosen time.");
-        switch (type) {
-            case "breakfast" -> {
-                Self.selves.get(selfName).breakfastStudents.get(day).remove(fromId);
-                Self.selves.get(selfName).breakfastStudents.get(day).put(toId, foodName);
-            }
-            case "lunch" -> {
-                Self.selves.get(selfName).lunchStudents.get(day).remove(fromId);
-                Self.selves.get(selfName).lunchStudents.get(day).put(toId, foodName);
-            }
-            case "dinner" -> {
-                Self.selves.get(selfName).dinnerStudents.get(day).remove(fromId);
-                Self.selves.get(selfName).dinnerStudents.get(day).put(toId, foodName);
+        for (Reserve reserve : student.reserveList) {
+            if (Objects.equals(reserve.type, type) && reserve.day == day) {
+                Self self = Self.selves.get(reserve.selfName);
+                self.transferFood(reserve.day, reserve.type, reserve.foodName, student.id, toId);
+                student.transfer(reserve, toId);
+                break;
             }
         }
     }
@@ -93,10 +98,10 @@ public class StudentController extends UserController {
 
 
     private void showFoodMenu(int day, String type) {
-        String[] menu = FoodHandler.getMenu(day,type);
+        String[] menu = FoodHandler.getMenu(day, type);
         int price1 = 0;
         int price2 = 0;
-        switch (type){
+        switch (type) {
             case "breakfast" -> {
                 price1 = FoodHandler.breakfastPrice.get(menu[0]);
                 price2 = FoodHandler.breakfastPrice.get(menu[1]);

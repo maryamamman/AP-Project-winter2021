@@ -49,6 +49,11 @@ public class Student extends User {
         }
     }
 
+    public void transfer(Reserve reserve, int toId){
+        reserveList.remove(reserve);
+        getStudent(toId).reserveList.add(reserve);
+    }
+
     public boolean hasFood(int day, String type) {
         for (Reserve reserve :
                 reserveList) {
