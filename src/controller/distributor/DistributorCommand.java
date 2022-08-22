@@ -7,6 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum DistributorCommand {
+
+    HELP("help"),
     CHECK_DEMAND("check demand (\\d+)"),
     GIVE_FOOD("give food (\\d+)");
 

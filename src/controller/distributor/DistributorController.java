@@ -31,6 +31,7 @@ public class DistributorController extends UserController {
             Matcher matcher = DistributorCommand.getMatcher(input, distributorCommand);
             if (matcher.find())
                 switch (distributorCommand) {
+                    case HELP -> help();
                     case CHECK_DEMAND -> checkDemand(Integer.parseInt(matcher.group(1)));
                     case GIVE_FOOD -> giveFood(Integer.parseInt(matcher.group(1)));
                 }
@@ -53,8 +54,12 @@ public class DistributorController extends UserController {
 
     }
 
-    private void giveFood(int id) {
+    private void help() {
+        DistributorMenu.printHelp();
+    }
 
+    private void giveFood(int id) {
+        distributor.giveFood(id);
     }
 
     private void checkDemand(int id) {
