@@ -40,7 +40,7 @@ public class AdminController extends UserController {
                     case DISTRIBUTE_REPORT -> distributeReport(Integer.parseInt(matcher.group(1)), matcher.group(2));
                     case DEMANDS_REPORT -> demandsReport(Integer.parseInt(matcher.group(1)), matcher.group(2));
                     case ADD_FOOD -> addFood(matcher.group(1), Integer.parseInt(matcher.group(2)), matcher.group(3));
-                    case SET_FOOD -> setMenu(matcher.group(1), matcher.group(2), Integer.parseInt(matcher.group(2)), matcher.group(3));
+                    case SET_FOOD -> setMenu(matcher.group(1), matcher.group(2), Integer.parseInt(matcher.group(3)), matcher.group(4));
                     case NEXT_MEAL -> nextMeal();
                     case ADMINS_LIST -> adminsList();
                     case STUDENTS_LIST -> studentsList();

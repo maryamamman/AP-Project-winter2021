@@ -39,8 +39,6 @@ public class StudentController extends UserController {
                     case RETAKE -> retake(Integer.parseInt(matcher.group(1)), matcher.group(2));
                     case RESERVE_REPORT -> reserveReport();
                 }
-
-            return null;
         } catch (
                 BackException e) {
             controller = new LoginController();

@@ -36,8 +36,6 @@ public class DistributorController extends UserController {
                     case GIVE_FOOD -> giveFood(Integer.parseInt(matcher.group(1)));
                 }
 
-
-            return null;
         } catch (
                 BackException e) {
             controller = new LoginController();

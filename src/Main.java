@@ -1,7 +1,6 @@
 import controller.Controller;
 import controller.LoginController;
 import model.Database;
-import model.user.Admin;
 
 public class Main {
 
